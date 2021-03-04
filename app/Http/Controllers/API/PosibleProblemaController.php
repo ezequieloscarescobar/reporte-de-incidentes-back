@@ -33,6 +33,6 @@ class PosibleProblemaController extends Controller
             ->where(['id' => $id])
             ->select('*')
             ->get();
-        return response()->json($posibleProblema);
+        return response()->json(count($posibleProblema)>0? $posibleProblema[0] : null);
     }
 }

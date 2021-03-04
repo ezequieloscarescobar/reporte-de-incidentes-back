@@ -38,3 +38,6 @@ Route::resource('incidentes', \App\Http\Controllers\API\IncidenteController::cla
 Route::resource('tecnicos', \App\Http\Controllers\API\TecnicoController::class)
     ->only(['show', 'index'])
     ->shallow();
+
+Route::resource('estados-de-incidentes', \App\Http\Controllers\API\EstadoIncidenteController::class)
+    ->only(['index']);

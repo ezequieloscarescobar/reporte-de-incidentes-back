@@ -65,10 +65,12 @@ class IncidenteController extends Controller
     public function show($id)
     {
         $incidente = DB::table(self::$tabla)
-            ->where(['id' => $id])
             ->select('*')
+            ->join('servicio_contratado', self::$tabla.'.servicio_contratado_id', '=', 'servicio_contratado.id')
+            ->join('cliente', 'servicio_contratado.cliente_id', '=', 'cliente.id')
+            ->where([self::$tabla.'.id' => $id])
             ->get();
-        return response()->json($incidente);
+        return response()->json(count($incidente)>0? $incidente[0]: null);
     }
 
     /**
@@ -82,8 +84,8 @@ class IncidenteController extends Controller
         $estado = DB::table('estado_incidente')
             ->where(['id' => $request->post('estado_id')])
             ->select('*')
-            ->get();
-        $fechaCerrado = $estado['final'] == 1? $fechaCerrado->format("Y-m-d") : null;
+            ->get()[0];
+        $fechaCerrado = $estado->final == 1? $fechaCerrado->format("Y-m-d") : null;
         $result = DB::table(self::$tabla)
             ->where(['id' => $id])
             ->update([
